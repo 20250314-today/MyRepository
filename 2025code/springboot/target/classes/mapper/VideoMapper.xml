@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.VideoMapper">
+<select id="selectAll" resultType="com.example.entity.Course">
+    select * from `course`
+    <where>
+        <if test="cname != null and cname != '' ">cname like concat('%',#{cname},'%')</if>
+        <if test="tname != null and tname != '' ">and tname like concat('%',#{tname},'%')</if>
+    </where>
+             order by id desc
+</select>
+    <insert id="insert">
+        insert into `course` (cname,url,tname,description,backImg)
+        values(#{cname},#{url},#{tname},#{description},#{backImg})
+    </insert>
+    <update id="updateById">
+        update `course` set cname =#{cname},url=#{url},tname=#{tname},description=#{description},backImg=#{backImg}
+        where id=#{id}
+    </update>
+</mapper>

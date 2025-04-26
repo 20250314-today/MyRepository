@@ -1,0 +1,54 @@
+server:
+  port: 9999
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 连接池核心参数
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      # 心跳检测参数
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      max-evictable-idle-time-millis: 600000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 主数据源
+      master:
+        url: jdbc:mysql://localhost:3306/code2025
+        username: root
+        password: abc123
+      # 监控配置
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+  profiles:
+    active: druid
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size:  5000MB
+      # 设置总上传的文件大小
+      max-request-size:  5000MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+# 项目相关配置
+jiliason:
+  # 文件路径 示例（ Windows配置D:/jiliason/uploadPath，Linux配置 /home/jiliason/uploadPath）
+  profile: ./uploadPath
+
