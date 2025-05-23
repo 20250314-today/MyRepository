@@ -2,10 +2,10 @@
   <div>
 <!--    头部区域开始-->
     <div style="height:60px;display:flex; ">
-      <div style="width:240px;display:flex;align-items:center;padding-left: 20px;background-color: #3a456b" >
+      <div style="width:240px;display:flex;align-items:center;padding-left: 20px;background-color: #3a5a6b" >
 <!--        居中-->
         <img src="@/assets/img/计算器.png" style="width:30px;height:30px;border-radius: 50%" alt="">
-        <span style="font-size:20px;font-weight:bold;color:#ffffff">这是我的毕设基础</span>
+        <span style="font-size:20px;font-weight:bold;color:#ffffff">在线教育平台</span>
       </div>
       <div style="flex:1;border-bottom: 1px solid #ddd;display:flex;align-items:center">
         <span  style="margin-left: 10px;cursor:pointer;margin-right:10px" @click="router.push('/manager/home')">
@@ -13,7 +13,10 @@
 
       </span></div>
       <div style="width:fit-content;display:flex;align-items : center;padding-right: 20px;border-bottom: 1px solid #ddd">
-        <el-dropdown>
+        <div style="float: right;margin-right: 3%;margin-top: 10px;" v-if="data.user.role ==='USER'">
+          <el-button type="success" @click="router.push('/studentweb/home')">返回首页</el-button>
+        </div>
+        <el-dropdown style="margin-left:10px">
           <div style="display: flex;align-items:center">
             <img v-if="data.user?.avatar" style="width:40px;height:40px;border-radius: 50%" :src="data.user?.avatar"/>
             <img v-else style="width:40px;height:40px;border-radius: 50%"
@@ -34,15 +37,16 @@
 <!--    头部区域结束-->
 
 <!--    下方区域开始-->
-<div style="display: flex;" >
+<div  style="display: flex;" >
 <!--  菜单区域开始-->
-  <div style="width:240px;" >
-    <el-menu router :default-openeds="['1','2']" :default-active="router.currentRoute.value.path" style="min-height:calc(100vh - 60px)">
+  <div  style="width:240px;" >
+    <el-menu router :default-openeds="['1','2']"
+             :default-active="router.currentRoute.value.path" style="min-height:calc(100vh - 60px)">
 <!--      default-active="router.curruntRouter.value.path":动态获取当前展示的路由-->
 <!--      default-openeds:展开二级菜单-->
       <el-menu-item index="/manager/home">
         <el-icon><House /></el-icon>
-        <span>首页</span>
+        <span>后台首页</span>
       </el-menu-item>
       <el-sub-menu index="1" >
         <template #title>
@@ -51,13 +55,22 @@
         </template>
         <el-menu-item index="/manager/notice" v-if="data.user.role === 'ADMIN'">系统公告</el-menu-item>
         <el-menu-item index="/manager/notice" v-else>公告信息</el-menu-item>
-        <el-menu-item index="/manager/category" >班级</el-menu-item>
-        <el-menu-item index="/manager/introduction">学习攻略</el-menu-item>
-        <el-menu-item index="/manager/study">在线学习</el-menu-item>
-        <el-menu-item index="/manager/playall">课程</el-menu-item>
-        <el-menu-item index="/manager/apply">审核</el-menu-item>
-        <el-menu-item index="/manager/book">书籍推荐</el-menu-item>
-        <el-menu-item index="/manager/upload">上传视频</el-menu-item>
+        <el-menu-item index="/manager/category" >笔记分类</el-menu-item>
+        <el-menu-item v-if="data.user.role === 'ADMIN'" index="/manager/classadmin">班级管理</el-menu-item>
+        <el-menu-item v-if="data.user.role === 'USER'" index="/manager/introduction">学习笔记</el-menu-item>
+<!--        <el-menu-item index="/manager/study">在线学习</el-menu-item>-->
+        <el-menu-item v-if="data.user.role === 'TEACHER'" index="/manager/studenthomework">作业管理</el-menu-item>
+        <el-menu-item index="/manager/teacherupvideo">课程</el-menu-item>
+        <el-menu-item v-if="data.user.role === 'TEACHER'" index="/manager/scoremanagement">练习</el-menu-item>
+<!--        <el-menu-item v-if="data.user.role === 'TEACHER'" index="/manager/examine">试卷管理</el-menu-item>-->
+        <el-menu-item v-if="data.user.role === 'TEACHER'" index="/manager/questionmanagement">问答社区</el-menu-item>
+<!--        <el-menu-item v-if="data.user.role === 'TEACHER'" index="/manager/upload">上传视频</el-menu-item>-->
+        <el-menu-item v-if="data.user.role !== 'TEACHER'" index="/manager/apply">审核</el-menu-item>
+        <el-menu-item v-if="data.user.role === 'TEACHER'" index="/manager/teacherapplicant">审核</el-menu-item>
+        <el-menu-item v-if="data.user.role !== 'ADMIN'" index="/manager/book">书籍推荐</el-menu-item>
+<!--        <el-menu-item index="/manager/chat">AI聊天</el-menu-item>-->
+        <el-menu-item index="/manager/deepseekchat">AI聊天</el-menu-item>
+<!--        <el-menu-item index="/chat">聊天</el-menu-item>-->
       </el-sub-menu>
       <el-sub-menu index="2" v-if="data.user.role === 'ADMIN'">
         <template #title>
@@ -65,7 +78,8 @@
           <span>用户管理</span>
         </template>
         <el-menu-item index="/manager/admin">管理员信息</el-menu-item>
-        <el-menu-item index="/manager/user">用户信息</el-menu-item>
+        <el-menu-item index="/manager/user">学生信息</el-menu-item>
+        <el-menu-item index="/manager/teacher">教师信息</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
@@ -115,29 +129,30 @@ const updateUser =()=>{
 </script>
 <style>
 .el-menu{
-  background-color: #3a456b;
+  background-color: #3a5a6b;
   border: none ;
   box-shadow: 0 0 8px rgba(0,0,0,.12);
 
 }
+
 .el-sub-menu__title{
   color:#ddd;
-  background-color: #3a456b;
+  background-color: #3a5a6b;
 }
 .el-menu-item{
   color:#ddd;
   height:50px;
 }
 .el-menu .is-active{
-  background-color: #537bee;
+  background-color: #3a6b53;
   color:#fff;
 }
 .el-sub-menu__title:hover{
-  background-color: #3a456b;
+  background-color: #3a5a6b;
 }
 .el-menu-item:not(.is-active):hover{
 
-  background-color:  #7a9fff;
+  background-color: #3a6b3b;
   color:#333;
 }
 .el-tooltip__trigger{

@@ -1,5 +1,5 @@
 <template>
-  <div class="card" style="width:50%">
+  <div class="card" style="width:300px">
     <div style="font-size: 16px;text-align: center">修改密码</div>
     <div >
       <el-form ref="formRef" :model="data.user"  label-width="80px"

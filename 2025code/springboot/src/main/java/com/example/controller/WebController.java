@@ -2,9 +2,11 @@ package com.example.controller;
 
 import com.example.common.Result;
 import com.example.entity.Account;
+import com.example.entity.Teacher;
 import com.example.entity.User;
 import com.example.exception.CustomerException;
 import com.example.service.AdminService;
+import com.example.service.TeacherService;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,9 @@ public class WebController {
     AdminService adminService;
     @Resource
     UserService userService;
+
+    @Resource
+    TeacherService teacherService;
 //    表示这是一个get请求的接口
 
 //    / 表示路由
@@ -37,10 +42,13 @@ public class WebController {
         if("ADMIN".equals(account.getRole())){
             dbAccount=  adminService.login(account);
         }
-     else if("USER".equals(account.getRole())){
+        else if("USER".equals(account.getRole())){
          dbAccount = userService.login(account);
         }
-     else{
+        else if("TEACHER".equals(account.getRole())){
+            dbAccount = teacherService.login(account);
+        }
+        else{
          throw new CustomerException("非法请求");
         }
         return Result.success(dbAccount);
@@ -48,6 +56,11 @@ public class WebController {
     @PostMapping("/register")
     public Result register(@RequestBody User user){
         userService.register(user);
+        return Result.success();
+    }
+    @PostMapping("/registers")
+    public Result register(@RequestBody Teacher user){
+        teacherService.register(user);
         return Result.success();
     }
     @PostMapping("/updatePassword")

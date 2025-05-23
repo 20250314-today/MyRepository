@@ -34,6 +34,7 @@
 
 <script setup>
 import {reactive, ref} from "vue";
+import request from "@/utils/request.js"
 const data = reactive({
       textarea: ''
   })

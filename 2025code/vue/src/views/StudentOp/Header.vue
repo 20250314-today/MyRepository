@@ -93,13 +93,13 @@ h1 {
   right: 0px;
 }
 
-.el-menu {
+el-menu {
   border-right: solid 1px #e6e6e6;
   list-style: none;
   position: relative;
   margin: 0;
   padding-left: 0;
-  background-color: #babae4;
+  background-color: #d9e3ed;
 }
 .el-menu--horizontal>.el-menu-item[data-v-15228138] {
   float: left;
@@ -108,7 +108,7 @@ h1 {
   margin: 0;
   border-bottom: 2px solid transparent;
   color: #ffffff;
-  background-color: #babae4;
+  background-color:#d8e2ec;
   font-size: 20px;
 }
 .el-menu--horizontal>.el-submenu .el-submenu__title {

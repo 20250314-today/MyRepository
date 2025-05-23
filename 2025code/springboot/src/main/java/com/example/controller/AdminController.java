@@ -57,19 +57,23 @@ public class AdminController {
         return Result.success(pageInfo);
     }
     @GetMapping("/export")
+    //HttpServletResponse response：用于输出 Excel 文件
     public void exportData(Admin admin, HttpServletResponse response) throws Exception {
         String ids = admin.getIds();
         if(StrUtil.isNotBlank(ids)){
+            //获取请求参数中的ids（以逗号分隔）
             String[] idsArr=ids.split(",");
             admin.setIdsArr(idsArr);
         }
-//        拿到所有数据
+//        拿到所有数据,调用服务层方法获取符合条件的管理员列表
         List<Admin> list=adminService.selectAll(admin);
+        //ExcelUtil.getWriter(true)：创建 Excel 写入器，true表示创建 xlsx 格式
         ExcelWriter writer=ExcelUtil.getWriter(true);
         writer.addHeaderAlias("username","账号");
         writer.addHeaderAlias("name","名称");
         writer.addHeaderAlias("phone","电话");
         writer.addHeaderAlias("email","邮箱");
+        //setOnlyAlias(true)：只导出设置了别名的字段
         writer.setOnlyAlias(true);
 //        写出数据writer
         writer.write(list);
@@ -84,6 +88,7 @@ public class AdminController {
         os.close();
     }
     @PostMapping("/import")
+    //MultipartFile file：接收上传的 Excel 文件
     public Result importData(MultipartFile file) throws Exception{
         InputStream inputStream=file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
@@ -93,6 +98,7 @@ public class AdminController {
         reader.addHeaderAlias("邮箱","email");
         List<Admin> list=reader.readAll(Admin.class);
         for (Admin admin:list){
+            //调用服务层的add方法逐个插入数据
             adminService.add(admin);
         }
         return  Result.success();

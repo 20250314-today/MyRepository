@@ -3,7 +3,7 @@
   registry: 'https://registry.npmmirror.com',
   pkgs: [
     {
-      name: 'anxios',
+      name: '@types/eventsource-polyfill',
       version: 'latest',
       type: 'tag',
       alias: undefined,
@@ -15,7 +15,7 @@
   cacheDir: 'C:\\Users\\DELL\\.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\DELL\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","anxios","--save"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\DELL\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","anxios","--save"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\DELL\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","@types/eventsource-polyfill","--save-dev"],"original":["--fix-bug-versions","--china","--userconfig=C:\\\\Users\\\\DELL\\\\.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","@types/eventsource-polyfill","--save-dev"]}',
     npm_config_user_agent: 'npminstall/7.12.0 npm/? node/v18.19.1 win32 x64',
     npm_config_cache: 'C:\\Users\\DELL\\.npminstall_tarball',
     NODE: 'D:\\nodejs\\node.exe',

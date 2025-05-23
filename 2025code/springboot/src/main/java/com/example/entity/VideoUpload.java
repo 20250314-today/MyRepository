@@ -6,15 +6,61 @@ public class VideoUpload {
     private String videoName;
     private String videoUrl;
     private String videoUUID;
+    private String videoPicture;
 
-    public VideoUpload(Integer id, String videoName, String videoUrl, String videoUUID) {
+    public String getVideoPicture() {
+        return videoPicture;
+    }
+
+    public void setVideoPicture(String videoPicture) {
+        this.videoPicture = videoPicture;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getTid() {
+        return tid;
+    }
+
+    public void setTid(Integer tid) {
+        this.tid = tid;
+    }
+
+    private String courseName;
+    private String content;
+    private Integer tid;
+    private String time;
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public VideoUpload(Integer id, String videoName, String videoUrl, String videoUUID, String videoPicture, String courseName, Integer tid) {
         this.id = id;
         this.videoName = videoName;
         this.videoUrl = videoUrl;
         this.videoUUID = videoUUID;
-    }
-
-    public VideoUpload() {
+        this.videoPicture = videoPicture;
+        this.courseName = courseName;
+        this.tid = tid;
     }
 
     public Integer getId() {

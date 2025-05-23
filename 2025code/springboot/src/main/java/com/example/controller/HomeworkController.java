@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
 import com.example.entity.Homework;
@@ -7,6 +8,7 @@ import com.example.entity.UserDoHomework;
 import com.example.service.HomeworkService;
 import com.example.service.UserClassService;
 import com.example.service.UserDoHomeworkService;
+import com.example.vo.HomeworkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -38,7 +41,7 @@ public class HomeworkController {
      * 列表
      */
     @RequestMapping("/list")
-    public Result list(@RequestBody Homework homeworkVo) {
+    public Result list(@RequestBody HomeworkVo homeworkVo) {
         homeworkVo.setPage((homeworkVo.getPage() - 1) * homeworkVo.getPageSize());
         Map<String, Object> page = homeworkService.queryPage(homeworkVo);
         return Result.success(page);
@@ -49,7 +52,7 @@ public class HomeworkController {
      * 查询未做作业列表
      */
     @RequestMapping("/findNotDoHomework")
-    public Result findNotDoHomework(@RequestBody Homework homeworkVo) {
+    public Result findNotDoHomework(@RequestBody HomeworkVo homeworkVo) {
         homeworkVo.setPage((homeworkVo.getPage() - 1) * homeworkVo.getPageSize());
         Map<String, Object> page = homeworkService.findNotDoHomework(homeworkVo);
         return Result.success(page);
@@ -73,11 +76,12 @@ public class HomeworkController {
         boolean save;
         if (homework.getId()!=null){
             save = homeworkService.updateById(homework);
-            if (homework.getUserId()!=null && homework.getUserId()!=""){
+            if (homework.getUserId()!=null && !Objects.equals(homework.getUserId(), "")){
                  userDoHomeworkService.updateModeByUserId(homework.getUserId(),homework.getId()+"",homework.getScore(),homework.getRemark());
             }
 
         }else {
+            homework.setCreateTime(DateUtil.now());
             save = homeworkService.save(homework);
         }
 

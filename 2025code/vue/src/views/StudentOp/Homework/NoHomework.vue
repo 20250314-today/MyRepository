@@ -18,11 +18,11 @@
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="page.page"
+        :current-page="data.page.page"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="page.pageSize"
+        :page-size="data.page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="NotHomeWork.length">
+        :total="data.page.total ">
     </el-pagination>
   </div>
 </template>
@@ -31,7 +31,7 @@
 import {reactive, onMounted, ref} from "vue";
 import Cookies from 'js-cookie'
 import router from "@/router/index.js";
-import {work} from "@/utils/studentweb/dohomework.js";
+import request from "@/utils/request.js"
 const data = reactive({
       page:{
         page:1, //初始页
@@ -44,9 +44,9 @@ const data = reactive({
     })
 // 组件挂载后执行
 onMounted(() => {
-  data.page.userId = Cookies.get('userId');
-  data.page.roleId = Cookies.get('roleId');
-  data.page.classId = Cookies.get('classId');
+  data.page.userId = parseInt(Cookies.get('userId'))
+  data.page.roleId = parseInt(Cookies.get('roleId'))
+  data.page.classId = parseInt(Cookies.get('classId'))
   CheckWork(data.page);
 });
 
@@ -65,8 +65,9 @@ const handleCurrentChange = (pageNum) => {
 
 // 获取未完成作业
 const CheckWork = (valid) => {
-  work(valid).then(resp => {
-    data.NotHomeWork = resp.data.resultData.data;
+  request.post('/study/homework/findNotDoHomework',valid).then(resp => {
+    data.NotHomeWork = resp.data.data;
+    data.page.total = resp.data?.total || 0;
   }).catch(error => {
     console.error('获取未完成作业失败:', error);
     // 可以添加错误提示
@@ -77,8 +78,9 @@ const CheckWork = (valid) => {
 const addNotHomework = (homework) => {
   router.push({
     name: 'MarkDownNotHomeWork',
-    params: {
-      data1: homework,
+    query: {
+      id:homework.id,
+      content:homework.content,
       data2: '123'
     }
   });

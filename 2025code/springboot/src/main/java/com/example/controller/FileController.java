@@ -19,12 +19,14 @@ import java.util.Map;
 public class FileController {
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file) throws IOException {
+        //获取当前项目的根目录
         String filePath = System.getProperty("user.dir") + "/files/";
         if(!FileUtil.isDirectory(filePath)){
             FileUtil.mkdir(filePath);
         }
 //        写文件
         byte[] bytes = file.getBytes();
+        //生成新文件名：当前时间戳 + 原文件名（避免文件名冲突）
         String fileName = System.currentTimeMillis()+"_"+file.getOriginalFilename();
 //        String encodeFileName=URLEncoder.encode(fileName, StandardCharsets.UTF_8);
         FileUtil.writeBytes(bytes,filePath + fileName);
@@ -32,6 +34,7 @@ public class FileController {
         return Result.success(url);
     }
     @GetMapping("/download/{fileName}")
+    //通过HttpServletResponse获取输出流
     public void download(@PathVariable String fileName, HttpServletResponse response) throws Exception{
         //        找到文件位置
         String filePath = System.getProperty("user.dir") + "/files/";//获取当前项目的根路径(code2025的绝对路径)D:\bishe\代码\2025code

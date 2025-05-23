@@ -1,5 +1,5 @@
 <template>
-<div class="card" style="width:50%">
+<div class="card" style="width:500px">
 <div style="font-size: 15px;text-align: center">个人中心</div>
   <el-form ref="formRef" :model="data.user" label-width="80px" style="padding:20px 30px 10px 0">
     <el-form-item label="账号" prop="username">
@@ -15,8 +15,9 @@
       <el-input v-model="data.user.email" autocomplete="off" placeholder="请输入邮箱"/>
     </el-form-item>
     <el-form-item label="头像" prop="avatar">
-
+      <img v-if="data.user.avatar" :src="data.user.avatar" style="width: 100px; margin-bottom: 10px">
       <el-upload
+          name="file"
           list-type="picture"
           action="http://localhost:9999/files/upload"
           :headers="{token:data.user.token}"
@@ -40,28 +41,52 @@ import request from '@/utils/request.js';
 import {ElMessage} from "element-plus";
 const data =reactive({
   user:JSON.parse( localStorage.getItem("code_user")|| '{}'),
+  form:{},
 })
 const handleFileSuccess=(res) =>{
-  data.user.avatar=res.avatar
+  console.log("avatar:",res)
+  // 根据实际接口调整
+  if (res.code ===  '200') {
+    data.user.avatar = res.data
+    console.log("11:",data.user.avatar)
+    ElMessage.success('头像更新成功')
+  } else {
+    ElMessage.error(res.msg || '头像上传失败')
+  }
 }
 const update = () =>{
-  let url
   if(data.user.role==='ADMIN'){
-    url='/admin/update'
+    request.post( '/admin/update',data.user).then(res=>{
+      if(res.code ==='200'){
+        ElMessage.success('更新成功')
+        localStorage.setItem("code_user",JSON.stringify(data.user))
+        emit ('updateUser')
+      }
+
+    })
   }
   if(data.user.role==='USER'){
-    url='/user/update'
+    request.post( '/user/update',data.user).then(res=>{
+      if(res.code ==='200'){
+        ElMessage.success('更新成功')
+        localStorage.setItem("code_user",JSON.stringify(data.user))
+        emit ('updateUser')
+      }
+
+    })
   }
-  request.post(url,data.user).then(res=>{
-    if(res.code ==='200'){
-      ElMessage.success('更新成功')
-      localStorage.setItem("code_user",JSON.stringify(data.user))
-      emit ('updateUser')
-    }
+  if(data.user.role==='TEACHER'){
+    request.post( '/teacher/update',data.user).then(res=>{
+      if(res.code ==='200'){
+        ElMessage.success('更新成功')
+        localStorage.setItem("code_user",JSON.stringify(data.user))
+        emit ('updateUser')
+      }
 
-  })
+    })
+  }
+
 }
-
 const emit = defineEmits(['updateUser'])
 </script>
 <style>

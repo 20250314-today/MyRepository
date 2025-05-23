@@ -1,26 +1,26 @@
 <template>
   <div>
-    <h1 style="color:#303133" >学生在线学习系统--学生端</h1>
+    <h1 style="color:#303133"> 在线教育平台</h1>
     <div>
       <el-menu :default-active="'1'"  class="el-menu-demo" :router="true" mode="horizontal">
-        <el-menu-item  @click="router.push('/manager/user')">系统首页</el-menu-item>
+        <el-menu-item  @click="router.push('/manager/user')">后台首页</el-menu-item>
         <el-menu-item index="/studentweb/home">首页</el-menu-item>
         <el-sub-menu index="1">
           <template #title>作业管理</template>
           <el-sub-menu index="1-1">
             <template #title>查看作业</template>
             <el-menu-item index="/studentweb/checkhomework">已完成</el-menu-item>
-<!--            <el-menu-item index="/studentweb/nohomework">未完成</el-menu-item>-->
+            <el-menu-item index="/studentweb/nohomework">未完成</el-menu-item>
           </el-sub-menu>
           <el-menu-item index="/studentweb/askandanswer">问答</el-menu-item>
           <el-menu-item index="/studentweb/studentpractice">练习</el-menu-item>
 
         </el-sub-menu>
         <!-- 其他顶层菜单 -->
-        <el-menu-item index="/studentweb/playall">在线学习</el-menu-item>
-<!--        <el-menu-item index="/studenthome/studentmanagement">班级管理</el-menu-item>-->
+        <el-menu-item index="/studentweb/studentaddclass">班级管理</el-menu-item>
+<!--        <el-menu-item index="/studentweb/onlinelearn">视频管理</el-menu-item>-->
         <el-menu-item index="/studentweb/apply">申请记录</el-menu-item>
-        <el-menu-item index="/studentweb/practicedetail">习题提交记录</el-menu-item>
+        <el-menu-item index="/studentweb/homeworkdetail">练习提交记录</el-menu-item>
         <el-menu-item @click="logout">退出</el-menu-item>
       </el-menu>
 
@@ -45,10 +45,9 @@ const logout=()=>
 </script>
 
 <style scoped>
-/*.blockl{*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
+.el-menu-demo{
+  background-color: #d8e2ec !important;
+}
 h1 {
   /* position: absolute; */
   margin-left: 40%;

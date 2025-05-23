@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.mapper.HomeworkMapper">
-
-    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.example.entity.Homework" id="homeworkMap">
         <result property="id" column="id"/>
         <result property="title" column="title"/>
@@ -24,8 +22,7 @@
         h.creator,
         h.class_id AS classId,
         h.commit_time AS commitTime,
-        DATE_FORMAT(h.create_time ,'%Y-%m-%d %H:%i:%s') AS createTime
-
+       DATE_FORMAT(h.create_time, '%Y-%m-%d %H:%i:%s') AS createTime
     </sql>
 
     <select id="queryCount" resultType="java.lang.Integer">
@@ -34,9 +31,7 @@
         FROM
         homework h
         LEFT JOIN class c ON c.id = h.class_id
-        LEFT JOIN `user` u ON u.id = h.creator
-        LEFT JOIN user_subject us ON u.id = us.user_id
-        LEFT JOIN `subject` s ON s.id = us.subject_id
+        LEFT JOIN `teacher` u ON u.id = h.creator
         <where>
             <if test="roleId == 2">
                 AND h.creator = #{userId}
@@ -50,15 +45,12 @@
     <select id="queryData" resultType="java.util.HashMap">
         SELECT
         c.class_name AS className,
-        u.user_name AS userName,
-        s.subject_name AS subjectName,
+        u.name AS userName,
         <include refid="baseQuery"></include>
         FROM
         homework h
         LEFT JOIN class c ON c.id = h.class_id
-        LEFT JOIN `user` u ON u.id = h.creator
-        LEFT JOIN user_subject us ON u.id = us.user_id
-        LEFT JOIN `subject` s ON s.id = us.subject_id
+        LEFT JOIN `teacher` u ON u.id = h.creator
         <where>
             <if test="roleId == 2">
                 AND h.creator = #{userId}
@@ -75,15 +67,12 @@
     <select id="findNotDoHomeworkData" resultType="java.util.HashMap">
         SELECT
         c.class_name AS className,
-        u.user_name AS userName,
-        s.subject_name AS subjectName,
+        u.name AS userName,
         <include refid="baseQuery"></include>
         FROM
         homework h
         LEFT JOIN class c ON c.id = h.class_id
-        LEFT JOIN `user` u ON u.id = h.creator
-        LEFT JOIN user_subject us ON u.id = us.user_id
-        LEFT JOIN `subject` s ON s.id = us.subject_id
+        LEFT JOIN `teacher` u ON u.id = h.creator
         LEFT JOIN user_do_homework udh ON h.id = udh.homework_id
         <where>
             <if test="userId != null">
@@ -101,9 +90,7 @@
         FROM
         homework h
         LEFT JOIN class c ON c.id = h.class_id
-        LEFT JOIN `user` u ON u.id = h.creator
-        LEFT JOIN user_subject us ON u.id = us.user_id
-        LEFT JOIN `subject` s ON s.id = us.subject_id
+        LEFT JOIN `teacher` u ON u.id = h.creator
         LEFT JOIN user_do_homework udh ON h.id = udh.homework_id
         <where>
             <if test="userId != null">

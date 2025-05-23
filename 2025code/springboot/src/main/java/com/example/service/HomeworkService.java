@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.entity.Homework;
+import com.example.vo.HomeworkVo;
 
 import java.util.Map;
 
@@ -15,9 +16,9 @@ import java.util.Map;
 public interface HomeworkService extends IService<Homework> {
 
 
-    Map<String, Object> queryPage(Homework homeworkVo);
+    Map<String, Object> queryPage(HomeworkVo homeworkVo);
 
-    Map<String, Object> findNotDoHomework(Homework homeworkVo);
+    Map<String, Object> findNotDoHomework(HomeworkVo homeworkVo);
 
 }
 

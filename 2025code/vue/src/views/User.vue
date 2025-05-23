@@ -74,7 +74,6 @@
           <el-input v-model="data.form.email" autocomplete="off" placeholder="请输入邮箱"/>
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
-
           <el-upload
              list-type="picture"
               action="http://localhost:9999/files/upload"
@@ -103,9 +102,8 @@
 <script lang="ts" setup>
 import {reactive, ref} from "vue";
 import request from "@/utils/request.js"
-import axios from "axios";
+import Cookies from "js-cookie"
 import {ElMessage, ElMessageBox} from "element-plus";
-import {Search} from "@element-plus/icons-vue"
 const data =reactive({
   user:JSON.parse( localStorage.getItem("code_user")|| '{}'),
   name:null,
@@ -168,7 +166,7 @@ const exportData =()=>{
   window.open(url)
 }
 const handleSelectionChange = (rows) => {//rows实际选择的数组
- data.rows=rows
+  data.rows=rows
   data.ids = data.rows.map(v => v.id)
 }
 
@@ -184,6 +182,10 @@ const load=() =>{
     if (res.code === '200') {
       data.tableData = res.data.list
       data.total = res.data.total
+
+      console.log('用户：'+data.user.id)
+      console.log('用户名：'+data.user.name)
+      console.log('classId：'+Cookies.get('classId'))
     }
     else{
       ElMessage.error(res.msg)

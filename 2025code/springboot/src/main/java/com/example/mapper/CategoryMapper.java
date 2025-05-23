@@ -13,7 +13,7 @@ public interface CategoryMapper {
     void insert(Category category);
 
     void updateById(Category category);
-    @Delete("delete from `categoryNoticeMapper.xml` where id = #{id}")
+    @Delete("delete from `category` where id = #{id}")
     void deleteById(Integer id);
     @Select("select * from `category` where id=#{id}")
     Category selectById(Integer id);

@@ -18,10 +18,14 @@
         </el-option>
         <el-option
 
-            label="普通用户"
+            label="学生"
             value="USER">
         </el-option>
+        <el-option
 
+            label="教师"
+            value="TEACHER">
+        </el-option>
       </el-select>
     </el-form-item>
     <div>
@@ -40,15 +44,17 @@ import request from '@/utils/request';  // 假设 request 的路径正确
 import * as THREE from 'three'
 import BIRDS from 'vanta/src/vanta.birds'
 import {useStore} from "vuex";
+import Cookies from 'js-cookie'
 const store = useStore()
 const vantaRef = ref();
 let vantaEffect = null;
 const data=reactive({
-  form:{role:'ADMIN'},
-      rules: {
-        username: [
-          {required: true, message: '请输入账号', trigger: 'blur'},
-          {min: 5, message: '账号最少五位', trigger: 'blur'}
+      user:JSON.parse( localStorage.getItem("code_user")|| '{}'),
+      form:{role:'ADMIN'},
+         rules: {
+           username: [
+             {required: true, message: '请输入账号', trigger: 'blur'},
+              {min: 5, message: '账号最少五位', trigger: 'blur'}
         ],
         password: [
           {required: true, message: '请输入密码', trigger: 'blur'}
@@ -63,15 +69,28 @@ const login=()=>{
       request.post('/login',data.form).then(res=>{
         if (res.code === '200') {
           const token = res.data.token;
-          store.commit('setToken', token); // 存入Vuex
-          localStorage.setItem('token', token); // 持久化存储
+         // store.commit('setToken', token); // 存入Vuex
+//localStorage.setItem('token', token); // 持久化存储
+          const userId = res.data.id
+
+         // console.log('用户id1：'+ userId)
+          Cookies.set('classId',res.data.classId)
+        //  console.log('classId：'+res.data.classId)
+        //  console.log('用户id2：'+ res.data.id)
+        //  console.log('登录响应数据:', res.data);
           localStorage.setItem("code_user",JSON.stringify(res.data || {}))
           ElMessage.success('登录成功')
           // router.push('/')
           if("USER" === res.data.role){
+            Cookies.set('userId',userId)
             location.href = '/studentweb/home'
           }
-          else {
+          else if("ADMIN" === res.data.role){
+            Cookies.set('adminId',userId)
+            router.push('/')
+          }
+          else if("TEACHER" === res.data.role){
+            Cookies.set('teacherId',userId)
             router.push('/')
           }
         } else {

@@ -1,25 +1,20 @@
 package com.example.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.entity.Class;
+import com.example.entity.Classs;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.HashMap;
 import java.util.List;
 
-/**
- * 
- * 
- * @author ${author}
- * @email ${email}
- * @date 2022-02-12 00:22:45
- */
 @Mapper
-public interface ClassMapper extends BaseMapper<Class> {
+public interface ClassMapper {
+    List<Classs> selectAll(Classs clas);
 
-    Integer queryCount(Class classVo);
+    void insert(Classs clas);
 
-    List<HashMap> queryData(Class classVo);
-
-    List<HashMap> findList(Class classVo);
+    void updateById(Classs clas);
+    @Delete("delete from `class` where id = #{id}")
+    void deleteById(Integer id);
+//    @Select("select * from `category` where id=#{id}")
+//    Introduction selectById(String id);
 }

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -59,12 +58,30 @@ public class Homework implements Serializable {
 	 * 每页条数
 	 */
 	private Integer pageSize;
-	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-	private Date commitTime;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+//	private Date commitTime;
+//	/**
+//	 * 创建时间
+//	 */
+//	private Date createTime;
+private String commitTime;
+private String createTime;
+
+	public String getCommitTime() {
+		return commitTime;
+	}
+
+	public void setCommitTime(String commitTime) {
+		this.commitTime = commitTime;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
 
 	@TableField(exist = false)
 	private String userId;
@@ -115,21 +132,21 @@ public class Homework implements Serializable {
 		this.classId = classId;
 	}
 
-	public Date getCommitTime() {
-		return commitTime;
-	}
+//	public Date getCommitTime() {
+//		return commitTime;
+//	}
+//
+//	public void setCommitTime(Date commitTime) {
+//		this.commitTime = commitTime;
+//	}
+//
+//	public Date getCreateTime() {
+//		return createTime;
+//	}
 
-	public void setCommitTime(Date commitTime) {
-		this.commitTime = commitTime;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+//	public void setCreateTime(String createTime) {
+//		this.createTime = createTime;
+//	}
 
 	public String getContent() {
 		return content;

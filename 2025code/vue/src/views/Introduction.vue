@@ -25,7 +25,7 @@
                 :header-cell-style="{fontWeight:'bold',color:'#333',backgroundColor:'#eaf4ff'}">
         <el-table-column type="selection" width="55" />
         <!--        批量选择-->
-        <el-table-column  label="风景图片" width="100" >
+        <el-table-column  label="笔记封面" width="100" >
           <template #default="scope">
             <el-image :preview-src-list="[scope.row.img]" :preview-teleported="true"
                       v-if="scope.row.img" :src="scope.row.img"
@@ -61,7 +61,7 @@
       />
     </div>
     <div>
-      <el-dialog v-model="data.formVisible" title="攻略信息" width="60%" destroy-on-close>
+      <el-dialog v-model="data.formVisible" title="笔记信息" width="60%" style="height:700px" destroy-on-close>
         <!--     destroy-on-close 重置dialog -->
         <el-form ref="formRef" :model="data.form" label-width="80px" style="padding:20px 30px 10px 0">
           <el-form-item label="图片" prop="img">
@@ -77,13 +77,13 @@
               <!--            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
             </el-upload>
           </el-form-item>
-          <el-form-item label="攻略标题" prop="title">
-            <el-input v-model="data.form.title" autocomplete="off" placeholder="请输入攻略标题"/>
+          <el-form-item label="笔记标题" prop="title">
+            <el-input v-model="data.form.title" autocomplete="off" placeholder="请输入笔记标题"/>
           </el-form-item>
-          <el-form-item label="攻略分类" prop="category">
+          <el-form-item label="笔记分类" prop="category">
             <el-select
                 v-model="data.form.categoryId"
-                placeholder="请选择攻略分类"
+                placeholder="请选择笔记分类"
                 size="large"
                 style="width: 240px"
             >
@@ -95,7 +95,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="攻略内容" prop="content">
+          <el-form-item label="笔记内容" prop="content">
             <div style="border:1px solid #ccc;width:100%">
               <Toolbar
                 style="border-bottom: 1px solid #ccc"
@@ -103,7 +103,7 @@
                 :mode="mode"
               />
               <Editor
-                style="height:400px;overflow-y:hidden;"
+                style="height:300px;overflow-y:hidden; "
                 v-model="data.form.content"
                 :mode="mode"
                 :defaultConfig="editorConfig"
@@ -120,7 +120,7 @@
           </div>
         </template>
       </el-dialog>
-      <el-dialog v-model="data.viewVisible" title="攻略信息" width="60%" destroy-on-close>
+      <el-dialog v-model="data.viewVisible" title="笔记信息" width="60%" destroy-on-close>
         <div v-html="data.content" style="padding :0 10px">
 
         </div>
@@ -129,12 +129,13 @@
   </div>
 </template>
 <script setup>
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import {Search} from "@element-plus/icons-vue";
 import {reactive, onBeforeUnmount, ref, shallowRef, onMounted} from "vue";
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue" // 正确包名
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import request from "@/utils/request.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+
 const data =reactive({
   user:JSON.parse( localStorage.getItem("code_user")|| '{}'),
   pageNum:1,
@@ -148,6 +149,7 @@ const data =reactive({
   content:null,
   viewVisible:false
 })
+
 const loadCategory = () =>{
   request.get('/category/selectAll').then(res=>{
     if(res.code === '200'){
@@ -174,15 +176,16 @@ editorConfig.MENU_CONF['uploadImage']={
   server:'http://localhost:9999/files/wang/upload',//服务端图片上传接口
   fieldName:'file'
 }
+const handleCreated=(editor)=>{
+  editorRef.value=editor
+}
 onBeforeUnmount(()=>{
   const editor = editorRef.value
   if(editor == null) return
   editor.destroy()
 
 })
-const handleCreated=(editor)=>{
-  editorRef.value=editor
-}
+
 const load=() =>{
   request.get('/introduction/selectPage',{
     params: {

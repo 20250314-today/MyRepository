@@ -15,7 +15,6 @@ import java.io.Serializable;
  * @date 2022-02-12 00:24:21
  */
 
-@TableName("user_class")
 public class UserClass implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -28,6 +27,16 @@ public class UserClass implements Serializable {
 	 * 用户id
 	 */
 	private Integer userId;
+	private Integer teacherId;
+
+	public Integer getTeacherId() {
+		return teacherId;
+	}
+
+	public void setTeacherId(Integer teacherId) {
+		this.teacherId = teacherId;
+	}
+
 	/**
 	 * 班级id
 	 */

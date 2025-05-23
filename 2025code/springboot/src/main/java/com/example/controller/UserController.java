@@ -61,22 +61,10 @@ public class  UserController {
         PageInfo<User> pageInfo = userService.selectPage(pageNum, pageSize, user);
         return Result.success(pageInfo);
     }
-    @RequestMapping("/findNotDoWork")
-    public Result findNotDoWork(@RequestBody User userVo) {
-        userVo.setPage((userVo.getPage() - 1) * userVo.getPageSize());
-        Map<String, Object> page = usersService.findNotDoWork(userVo);
-        return Result.success(page);
-    }
 
     /**
      * 列表
      */
-    @RequestMapping("/findNotDoHomework")
-    public Result findNotDoHomework(@RequestBody User userVo) {
-        userVo.setPage((userVo.getPage() - 1) * userVo.getPageSize());
-        Map<String, Object> page = usersService.findNotDoHomework(userVo);
-        return Result.success(page);
-    }
 
     @GetMapping("/export")
     public void exportData(User user, HttpServletResponse response) throws Exception {

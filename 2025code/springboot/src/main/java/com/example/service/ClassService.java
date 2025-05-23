@@ -1,23 +1,63 @@
 package com.example.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.entity.Class;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.example.entity.*;
+import com.example.entity.Classs;
+import com.example.exception.CustomerException;
+import com.example.mapper.*;
+import com.example.utils.TokenUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-/**
- * 
- *
- * @author ${author}
- * @email ${email}
- * @date 2022-02-12 00:22:45
- */
-public interface ClassService extends IService<Class> {
+@Service
+public class ClassService {
+    @Resource
+    TeacherMapper teacherMapper;
+    @Resource
+    ClassMapper classMapper;
+    @Resource
+    UserMapper userMapper;
+    public String introduction(String name){
+        if("introduction".equals(name)){
+            return "introduction";
+        }
+        else {
+            throw new CustomerException("账号错误");
+        }
+    }
+    public List<Classs> selectAll(Classs clas){
+        return classMapper.selectAll(null);
+    }
 
-    Map<String, Object> queryPage(Class classVo);
+    public PageInfo selectPage(Integer pageNum, Integer pageSize, Classs clas) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Classs> list = classMapper.selectAll(clas);
+//        筛选title
+        for (Classs dbIntroduction : list) {
+            Integer userId = dbIntroduction.getUserId();
+            Teacher teacher =  teacherMapper.selectById(String.valueOf(userId));
+            if(ObjectUtil.isNotEmpty(teacher)){
+                dbIntroduction.setUserName(teacher.getName());
+            }
+        }
+        return PageInfo.of(list);
+    }
 
-    List<HashMap> findList(Class classVo);
+    public void add(Classs clas) {
+        clas.setTime(DateUtil.now());
+        classMapper.insert(clas);
+    }
+
+    public void update(Classs clas) {
+        classMapper.updateById(clas);
+    }
+    public void deleteById(Integer id) {
+        classMapper.deleteById(id);
+    }
+
 }
-

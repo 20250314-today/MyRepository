@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.common.Result;
 import com.example.entity.Exercises;
 import com.example.service.ExercisesService;
+import com.example.vo.ExercisesVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class ExercisesController {
      * 列表
      */
     @RequestMapping("/list")
-    public Result list(@RequestBody  Exercises exercisesVo){
+    public Result list(@RequestBody ExercisesVo exercisesVo){
         exercisesVo.setPage((exercisesVo.getPage() - 1) * exercisesVo.getPageSize());
         Map<String, Object> page = exercisesService.queryPage(exercisesVo);
         return Result.success(page);
@@ -39,7 +40,7 @@ public class ExercisesController {
      * 列表
      */
     @RequestMapping("/findNotDoExercises")
-    public Result findNotDoExercises(@RequestBody  Exercises exercisesVo){
+    public Result findNotDoExercises(@RequestBody  ExercisesVo exercisesVo){
         exercisesVo.setPage((exercisesVo.getPage() - 1) * exercisesVo.getPageSize());
         Map<String, Object> page = exercisesService.findNotDoExercises(exercisesVo);
         return Result.success(page);
@@ -67,7 +68,6 @@ public class ExercisesController {
         }
         return Result.error("504");
     }
-
     /**
      * 修改
      */

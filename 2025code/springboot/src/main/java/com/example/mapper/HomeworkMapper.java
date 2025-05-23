@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.entity.Homework;
+import com.example.vo.HomeworkVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
@@ -17,11 +18,11 @@ import java.util.List;
 @Mapper
 public interface HomeworkMapper extends BaseMapper<Homework> {
 
-    Integer queryCount(Homework homeworkVo);
+    Integer queryCount(HomeworkVo homeworkVo);
 
-    List<HashMap> queryData(Homework homeworkVo);
+    List<HashMap> queryData(HomeworkVo homeworkVo);
 
-    List<HashMap> findNotDoHomeworkData(Homework homeworkVo);
+    List<HashMap> findNotDoHomeworkData(HomeworkVo homeworkVo);
 
-    Integer findNotDoHomeworkCount(Homework homeworkVo);
+    Integer findNotDoHomeworkCount(HomeworkVo homeworkVo);
 }

@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.entity.UserDoExercise;
+import com.example.vo.UserDoExerciseVo;
 
 import java.util.Map;
 
@@ -15,6 +16,6 @@ import java.util.Map;
 public interface UserDoExerciseService extends IService<UserDoExercise> {
 
 
-    Map<String, Object> queryPage(UserDoExercise userDoExerciseVo);
+    Map<String, Object> queryPage(UserDoExerciseVo userDoExerciseVo);
 }
 

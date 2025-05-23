@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.VideoUploadMapper">
+    <select id="selectAll" resultType="com.example.entity.VideoUpload">
+        select video_upload.* ,teacher.name as userName ,teacher.avatar as userAvatar from `video_upload`
+        left join teacher on video_upload.tid = teacher.id
+        <where>
+            <if test="courseName != null and courseName != '' ">video_upload.courseName like concat('%',#{courseName},'%')</if>
+            <if test="tid != null  ">and video_upload.tid =#{tid}</if>
+
+        </where>
+        order by id desc
+    </select>
+    <insert id="insert">
+        insert into `video_upload` (videoPicture,courseName,content,tid,time)
+        values(#{videoPicture},#{courseName},#{content},#{tid},#{time})
+    </insert>
+    <update id="updateById">
+        update `video_upload` set videoPicture =#{videoPicture},content=#{content},
+                                  time=#{time},tid=#{tid}
+        where id=#{id}
+    </update>
+</mapper>

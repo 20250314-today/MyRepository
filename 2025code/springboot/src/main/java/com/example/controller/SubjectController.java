@@ -1,11 +1,11 @@
 package com.example.controller;
 
+
 import com.example.common.Result;
 import com.example.entity.Subject;
 import com.example.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
  * @date 2022-02-15 21:39:15
  */
 @RestController
-@RequestMapping("study/subject")
+@RequestMapping("/study/subject")
 public class SubjectController {
     @Autowired
     private SubjectService subjectService;

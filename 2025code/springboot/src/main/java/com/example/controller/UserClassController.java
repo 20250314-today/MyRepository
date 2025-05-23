@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
 import com.example.entity.UserClass;
 import com.example.service.UserClassService;
+import com.example.vo.UserClassVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ import java.util.Map;
  * @date 2022-02-12 00:24:21
  */
 @RestController
-@RequestMapping("study/userClass")
+@RequestMapping("/study/userClass")
 public class UserClassController {
     @Autowired
     private UserClassService userClassService;
@@ -30,7 +31,7 @@ public class UserClassController {
      * 列表
      */
     @RequestMapping("/list")
-    public Result list(@RequestBody  UserClass userClassVo) {
+    public Result list(@RequestBody  UserClassVo userClassVo) {
         userClassVo.setPage((userClassVo.getPage() - 1) * userClassVo.getPageSize());
         Map<String, Object> page = userClassService.queryPage(userClassVo);
         return Result.success(page);
@@ -40,8 +41,8 @@ public class UserClassController {
      * 列表
      */
     @RequestMapping("/findList")
-    public Result findList(@RequestBody  UserClass userClassVo) {
-        List<HashMap> data = userClassService.findList(userClassVo);
+    public Result findList(@RequestBody UserClassVo userClassVo) {
+        List<HashMap> data = userClassService.selectList(userClassVo);
         return Result.success(data);
     }
 

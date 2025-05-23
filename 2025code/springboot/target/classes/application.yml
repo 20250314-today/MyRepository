@@ -1,6 +1,19 @@
 server:
   port: 9999
 spring:
+  xf-spark:
+    app-id: b129b47c
+    api-key: 0a01913915ab10c51cb7ad39d2c434e8
+    api-secret: MDc2MjQ1NWU4NmQzNTlkZmJkZDM5ZTQz
+    chat-url: wss://spark-api.xf-yun.com/v3.5/chat
+    image-url: https://spark-api.cn-huabei-1.xf-yun.com/v2.1/tti
+  ai:
+    deepseek:
+      apiKey: sk-0981a2511137492d8dd5ca819db272de # 你的api key  sk-0981a2511137492d8dd5ca819db272de
+      apiUrl: https://api.deepseek.com/chat/completions
+      model: deepseek-chat # 选择模型（V3：deepseek-chat  R1：deepseek-reasoner）
+      temperature: 0.7
+      maxTokens: 1000
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -47,8 +60,18 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml  # 确保路径正确，这里假设映射文件在 resources/mapper 目录下
+  type-aliases-package: com.example.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # 项目相关配置
 jiliason:
   # 文件路径 示例（ Windows配置D:/jiliason/uploadPath，Linux配置 /home/jiliason/uploadPath）
   profile: ./uploadPath
+file:
+  videoPath: D:/code2025/file/video/
+  imagePath: D:/code2025/file/image/
+
+
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.ExamQuestionMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO exam_question(exam_id, content, type, score,exam_title,answer)
+        VALUES(#{examId}, #{content}, #{type}, #{score},#{examTitle},#{answer})
+    </insert>
+    <select id="getExam" resultType="com.example.entity.ExamQuestion">
+        SELECT
+            e.id, e.title,
+            q.id as q_id, q.content as q_content, q.type as q_type, q.score as q_score,
+            o.id as o_id, o.content as o_content, o.is_correct
+        FROM exam e
+                 LEFT JOIN exam_question q ON e.id = q.exam_id
+        WHERE e.id = #{examId}
+    </select>
+    <insert id="submitAnswers">
+        insert into `student_exam_answer` (student_id,answer,score,submit_time)
+        values(#{studentId},#{answer},#{score},#{submitTime})
+    </insert>
+    <update id="answersUpdate">
+        update `student_exam_answer` set answer =#{answer},score=#{score},
+                                         submit_time=#{submitTime}
+        where id=#{id}
+    </update>
+</mapper>

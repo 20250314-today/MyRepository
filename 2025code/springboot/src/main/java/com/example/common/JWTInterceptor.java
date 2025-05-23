@@ -8,6 +8,7 @@ import com.example.entity.Account;
 
 import com.example.exception.CustomerException;
 import com.example.service.AdminService;
+import com.example.service.TeacherService;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,14 +21,17 @@ public class JWTInterceptor implements HandlerInterceptor {
     AdminService adminService;
     @Resource
     UserService userService;
+    @Resource
+    TeacherService teacherService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("拦截路径: " + request.getRequestURI()); // 查看是否拦截了视频请求
         String token = request.getHeader("token");
         if (StrUtil.isEmpty(token)) {
             token = request.getParameter("token");
         }
         if (StrUtil.isBlank(token)) {
-            throw new CustomerException("401", "您无权限操作");
+            throw new CustomerException("401", "获取token失败，您无权限操作");
         }
         Account account = null;
         try {
@@ -42,11 +46,14 @@ public class JWTInterceptor implements HandlerInterceptor {
             if ("USER".equals(role)) {
                 account = userService.selectById(userId);
             }
+            if ("TEACHER".equals(role)) {
+                account = teacherService.selectById(userId);
+            }
         } catch(Exception e){
-            throw new CustomerException("401","您无权限操作");
+            throw new CustomerException("401","您无权限操作，请登录");
         }
         if (account == null){
-            throw new CustomerException("401","您无权限操作");
+            throw new CustomerException("401","您无权限操作，请登录");
         }
         try{
             JWTVerifier jwtVerifier=JWT.require(Algorithm.HMAC256(account.getPassword())).build();

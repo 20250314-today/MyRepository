@@ -6,10 +6,8 @@ const request=axios.create({
      baseURL:'http://localhost:9999',
      timeout:30000
  })
-const service = axios.create({
-    timeout: 30000 // 请求超时时间
-})
 request.interceptors.request.use(config =>{
+
     config.headers['Content-Type']='application/json;charset=utf-8';
     let user = JSON.parse(localStorage.getItem('code_user')||'{}')
      config.headers['token'] = user.token
@@ -46,6 +44,19 @@ request.interceptors.request.use(config =>{
 
     }
 )
+
+export function get(url,params) {
+    //params.t = new Date().getTime(); //get方法加一个时间参数,解决ie下可能缓存问题.
+    return request({
+        url:url,
+        method: 'get',
+        headers: {
+        },
+        params
+    })
+}
+
+
 //封装post请求
 export function post(url, data) {
     //默认配置
@@ -58,11 +69,13 @@ export function post(url, data) {
         data:data
     };
     sendObject.data=JSON.stringify(data);
-    return service(sendObject)
+    return request(sendObject)
 }
+
+
 //封装put方法 (resfulAPI常用)
 export function put(url,data){
-    return service({
+    return request({
         url: url,
         method: 'put',
         headers: {
@@ -73,7 +86,7 @@ export function put(url,data){
 }
 //删除方法(resfulAPI常用)
 export function deletes(url,data){
-    return service({
+    return request({
         url: url,
         method: 'delete',
         headers: {
@@ -82,18 +95,6 @@ export function deletes(url,data){
         data:JSON.stringify(data)
     })
 }
-export function get(url,params) {
-    //params.t = new Date().getTime(); //get方法加一个时间参数,解决ie下可能缓存问题.
-    return service({
-        url:url,
-        method: 'get',
-        headers: {
-        },
-        params
-    })
-}
 
+//不要忘记export
 export default request
-export {
-    service
-}

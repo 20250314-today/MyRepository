@@ -45,6 +45,24 @@ public class UserDoHomework implements Serializable {
 	private String mode;
 	private Integer page;
 	private String content;
+	private Double score;
+	private String remark;
+
+	public Double getScore() {
+		return score;
+	}
+
+	public void setScore(Double score) {
+		this.score = score;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	/**
 	 * 每页条数

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" style="margin-bottom:5px">
+    <div class="card" style="margin-bottom:5px;width:700px">
       <el-input :prefix-icon="Search" clearable @clear="load" placeholder="请输入标题" v-model="data.title" style="width:240px;
       margin-right: 5px" ></el-input>
       <el-button type="primary" @click="load">搜 索</el-button>
@@ -12,7 +12,7 @@
     <div class="card" style="margin-bottom:5px" >
       <el-table :data="data.tableData" style="width: 100% "  @selection-change="handleSelectionChange"
                 :header-cell-style="{fontWeight:'bold',color:'#333',backgroundColor:'#eaf4ff'}">
-        <!--        批量选择-->
+        <!--        批量选择,props 是父组件与子组件之间通信的核心机制，主要用于父组件向子组件传递数据-->
         <el-table-column prop="title" label="申诉标题" width="170" />
         <el-table-column prop="content" label="申诉内容" width="180" />
         <el-table-column prop="userName" label="申诉人" width="100" />
@@ -24,7 +24,7 @@
             <el-tag type="danger" v-if="scope.row.status ==='审核拒绝'">{{scope.row.status}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="reason" label="审核说明" width="180" />
+        <el-table-column prop="reason" label="审核说明" width="160px" />
         <el-table-column label="操作" width="100" >
           <template #default="scope" v-if="data.user.role === 'USER'">
             <el-button :disabled="scope.row.status !== '待审核'"  icon="Edit" type="primary" circle @click="handleEdit(scope.row)"></el-button>
@@ -82,6 +82,7 @@ import {Search} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
 import request from "@/utils/request.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+import Cookies from 'js-cookie'
 const data=reactive({
   user:JSON.parse(localStorage.getItem('code_user') || "{}"),
   pageNum:1,
@@ -111,6 +112,8 @@ const load=() =>{
     if (res.code === '200') {
       data.tableData = res.data?.list
       data.total = res.data?.total
+      console.log('用户id1:'+Cookies.get("userId"))
+      console.log('用户id2：'+data.user.id)
     }
     else{
       ElMessage.error(res.msg)

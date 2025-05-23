@@ -3,7 +3,6 @@
 
 <mapper namespace="com.example.mapper.UserDoHomeworkMapper">
 
-	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.example.entity.UserDoHomework" id="userDoHomeworkMap">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
@@ -32,8 +31,8 @@
         LEFT JOIN `user` u1 ON u1.id = udh.user_id
         LEFT JOIN homework h ON h.id = udh.homework_id
         LEFT JOIN `user` u ON u.id = h.creator
-        LEFT JOIN user_subject us ON u.id = us.user_id
-        LEFT JOIN `subject` s ON s.id = us.subject_id
+--         LEFT JOIN user_subject us ON u.id = us.user_id
+--         LEFT JOIN `subject` s ON s.id = us.subject_id
         <where>
             <if test="userId != null">
                 AND udh.user_id = #{userId}
@@ -48,9 +47,9 @@
         SELECT
         h.title,
         h.answer,
-        u.user_name AS userName,
-        u1.user_name AS studentName,
-        s.subject_name AS subjectName,
+        u.username AS userName,
+        u1.username AS studentName,
+--         s.subject_name AS subjectName,
         h.class_id as classId,
         <include refid="baseQuery"></include>
         FROM
@@ -58,8 +57,8 @@
         LEFT JOIN `user` u1 ON u1.id = udh.user_id
         LEFT JOIN homework h ON h.id = udh.homework_id
         LEFT JOIN `user` u ON u.id = h.creator
-        LEFT JOIN user_subject us ON u.id = us.user_id
-        LEFT JOIN `subject` s ON s.id = us.subject_id
+--         LEFT JOIN user_subject us ON u.id = us.user_id
+--         LEFT JOIN `subject` s ON s.id = us.subject_id
         <where>
             <if test="userId != null">
                 AND udh.user_id = #{userId}

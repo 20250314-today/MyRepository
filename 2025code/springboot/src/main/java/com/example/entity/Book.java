@@ -6,7 +6,16 @@ public class Book {
     private String name;
     private String price;
     private String author;
-    private Integer num;
+//    private Integer num;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Integer getId() {
         return id;
@@ -48,11 +57,11 @@ public class Book {
         this.author = author;
     }
 
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
+//    public Integer getNum() {
+//        return num;
+//    }
+//
+//    public void setNum(Integer num) {
+//        this.num = num;
+//    }
 }

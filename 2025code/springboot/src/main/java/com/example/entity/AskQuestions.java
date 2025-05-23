@@ -1,5 +1,9 @@
 package com.example.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,12 +15,17 @@ import java.util.Date;
  * @email ${email}
  * @date 2022-02-12 00:24:21
  */
+@TableName("ask_questions")
 public class AskQuestions implements Serializable {
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 问题ID
 	 */
+
+	/**
+	 * 问题ID
+	 */
+	@TableId(type = IdType.AUTO)
 	private Integer id;
 	/**
 	 * 发送人ID

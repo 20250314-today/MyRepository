@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <h1 class="ti">问答社区</h1>
     <el-divider></el-divider>
     <div v-for=" t in data.NotHomeWork">
@@ -18,22 +18,22 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="data.page.page"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[3, 5, 7, 9]"
         :page-size="data.page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="data.NotHomeWork.length">
+        :total="data.page.total">
     </el-pagination>
   </div>
 </template>
 
 <script setup>
 import {reactive, ref, onMounted} from "vue";
-import {askandanswer} from '../../../utils/studentweb/askandanswer.js'
 import Cookies from "js-cookie";
+import request from "@/utils/request.js"
 const data = reactive({
       page:{
         page:1, //初始页
-        pageSize:10,    //    每页的数据
+        pageSize:3,    //    每页的数据
         userId:0,
       },
       NotHomeWork:[],
@@ -45,30 +45,32 @@ const { page, NotHomeWork } = data;
 
 // 生命周期钩子：组件挂载后执行
 onMounted(() => {
-  page.userId = Cookies.get('userId');
+  data.page.userId = parseInt(Cookies.get('userId'))
   CheckWork(page);
 });
 
 // 分页大小改变时的处理函数
 const handleSizeChange = (size) => {
-  page.pageSize = size;
+  data.page.pageSize = size;
   CheckWork(page);
   console.log(`每页 ${size} 条`);
 };
 
 // 当前页码改变时的处理函数
 const handleCurrentChange = (pageNum) => {
-  page.page = pageNum; // 修正为 page，与定义的属性名一致
+  data.page.page = pageNum; // 修正为 page，与定义的属性名一致
   CheckWork(page);
   console.log(`当前页: ${pageNum}`);
 };
 
 // 获取数据的函数
 const CheckWork = (valid) => {
-  askandanswer(valid)
+  request.post('study/askQuestions/list',valid)
       .then((resp) => {
-        NotHomeWork.value = resp.data.resultData.data;
-        console.log(NotHomeWork.value);
+        console.log("resp:",resp)
+        data.NotHomeWork = resp.data.data;
+        data.page.total = resp.data.total || 0
+        console.log(data.NotHomeWork);
       })
       .catch((error) => {
         console.error('获取数据失败:', error);

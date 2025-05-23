@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:950px">
     <el-button @click="test()" type="primary"> 发布试题</el-button>
     <el-table
         :data="ScoreData"
@@ -28,7 +28,7 @@
           width="180">
       </el-table-column>
       <el-table-column label="操作">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button
               size="mini"
               @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
@@ -37,14 +37,14 @@
               @click="handleHomework(scope.$index, scope.row)">查看已完成情况</el-button>
           <el-button
               size="mini"
-              @click="handleNotHomwork(scope.$index, scope.row)">查看未完成情况</el-button>
+              @click="handleNotHomework(scope.$index, scope.row)">查看未完成情况</el-button>
         </template>
       </el-table-column>
     </el-table>
 
 
 
-    <el-dialog title="未完成情况" :visible.sync="dialogTableVisible">
+    <el-dialog title="未完成情况" v-model="dialogTableVisible">
       <el-table :data="NotHomework">
         <el-table-column prop="account" label="账号" width="150"></el-table-column>
         <el-table-column prop="userName" label="姓名" width="150"></el-table-column>
@@ -58,19 +58,19 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="NotHomework.length">
+          :total="page.total">
       </el-pagination>
     </el-dialog>
 
 
-    <el-dialog title="已完成情况" :visible.sync="dialogdoTableVisible">
+    <el-dialog title="已完成情况" v-model="dialogdoTableVisible">
       <el-table
           :data="Homework"
           style="width: 100%">
         <el-table-column
             label="完成时间"
             width="180">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <i class="el-icon-time"></i>
             <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
           </template>
@@ -81,7 +81,7 @@
             width="180">
         </el-table-column>
         <el-table-column label="操作">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button
                 size="mini"
                 @click="handle(scope.$index, scope.row)">查看答题情况</el-button>
@@ -95,7 +95,7 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="Homework.length">
+          :total="page.total">
       </el-pagination>
     </el-dialog>
 
@@ -108,15 +108,14 @@
         :page-sizes="[10, 20, 30, 40]"
         :page-size="page.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="ScoreData.length">
+        :total="page.total">
     </el-pagination>
   </div>
 </template>
 
 <script>
-import {listAllScore,listNotHomework,listHomework} from  '../../api/score'
 import Cookies from 'js-cookie'
-import {quclass} from "../../api/admin/queryclass";
+import request from "@/utils/request.js"
 export default {
   name: "ScoreManagment",
   data() {
@@ -149,28 +148,30 @@ export default {
       this.$router.push({
         name:'Detail',
         query:{
-          type:"试题"
+          type:"试题",
+          tag:'test'
         },
-        data1:'test'
       })
     },
     handleHomework(index,row){
       this.page.exerciseId=row.id;
       //Vue.delete(this.page,"userId")
-      this.$delete(this.page,'userId')
-      listHomework(this.page).then(resp=>{
-        this.Homework=resp.data.resultData.data
+      request.delete(this.page,'userId')
+      request.post('/study/userDoExercise/list',this.page).then(resp=>{
+        console.log("done:",resp)
+        this.Homework=resp.data.data
 
       })
       this.dialogdoTableVisible=true
     },
 
 
-    handleNotHomwork(index,row){
+    handleNotHomework(index,row){
       this.page.exerciseId=row.id;
       this.page.classId=row.classId
-      listNotHomework(this.page).then(resp=>{
-        this.NotHomework=resp.data.resultData.data
+      request.post('/study/user/findNotDoWork',this.page).then(resp=>{
+        console.log("notdone:",resp)
+        this.NotHomework=resp.data.data
 
       })
       this.dialogTableVisible=true
@@ -180,7 +181,7 @@ export default {
       this.$router.push({
         name:'DetailMark',
         params:{
-          data1:row.reply,
+         content:row.reply,
           data3:'888'
         }
       })
@@ -207,9 +208,10 @@ export default {
     },
 
     listAllStudentsScore(page){
-      listAllScore(page).then(resp=>{
-        this.ScoreData= resp.data.resultData.data
-
+      request.post('/study/exercises/list',page).then(resp=>{
+       // console.log("exer:",resp)
+        this.ScoreData= resp.data.data
+        this.page.total = resp.data?.total || 0;
       })
     }
   }

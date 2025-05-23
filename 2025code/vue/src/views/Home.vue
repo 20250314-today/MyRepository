@@ -12,7 +12,7 @@
         color="#ba5253"
       >
         <el-card style="min-width: 300px;">
-          <h4 >{{item.title}}}</h4>
+          <h4 >{{item.title}}</h4>
           <p>{{ item.content }}</p>
         </el-card>
       </el-timeline-item>
@@ -94,7 +94,7 @@ onMounted (()=>{
 
 let pieOptions = {
   title:{
-    text:"不同分类下用户发布旅游攻略帖子的数量",
+    text:"不同分类下用户发布学习笔记的数量",
     subtext:'统计维度：用户昵称',
     left:'center'
   },
@@ -113,17 +113,12 @@ let pieOptions = {
       radius: '50%',
       center: ['50%', '55%'],
       roseType: 'area',
-      data: [
-        { value: 40, name: '风景名胜' },
-        { value: 38, name: '人文景观' },
-        { value: 32, name: '历史古迹' }
-      ]
     }
   ]
 }
 let barOptions = {
   title:{
-    text:"不同分类下用户发布帖子数量Top5",
+    text:"不同分类下用户发布笔记数量Top5",
     subtext:'统计维度：用户昵称',
     left:'center'
   },
@@ -148,7 +143,7 @@ let barOptions = {
   },
   yAxis: {
     type: 'value',
-    name:'攻略数量'
+    name:'笔记数量'
   },
   tooltip:{
     trigger:'item',
@@ -169,7 +164,7 @@ let barOptions = {
 };
 let lineOptions = {
   title:{
-    text:'不同类型旅游攻略发布量折线图',
+    text:'不同类型学习笔记发布量折线图',
     subtext:'统计维度：最近一周',
     left:'center'
 
@@ -193,12 +188,12 @@ let lineOptions = {
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   },
   yAxis: {
-    name:'发布攻略数量',
+    name:'发布笔记数量',
     type: 'value'
   },
   series: [
     {
-      name:'攻略数量',
+      name:'笔记数量',
       data: [820, 932, 901, 934, 1290, 1330, 1320],
       type: 'line',
       smooth: true,

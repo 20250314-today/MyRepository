@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" style="margin-bottom:5px">
+    <div class="card" style="margin-bottom:5px;width:700px">
       <el-input :prefix-icon="Search" clearable @clear="load" placeholder="请输入标题" v-model="data.title" style="width:240px;
       margin-right: 5px" ></el-input>
       <el-button type="primary" @click="load">搜 索</el-button>

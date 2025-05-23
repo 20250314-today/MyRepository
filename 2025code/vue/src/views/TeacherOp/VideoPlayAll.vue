@@ -15,13 +15,14 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog :modal="false" title="视频播放" :visible="state.dialogVisible" width="40%">
+    <el-dialog  title="视频播放"  width="40%">
       <p class="video_title">{{state.videoName }}</p>
       <video :src="`${state.videoUrl}/${state.videoId}`"
              controls="controls" width="100%"
              @canplay="getVidDur()"
              @error="handleVideoError"
-             id="myvideo"></video>
+             id="myvideo">
+      </video>
     </el-dialog>
   </div>
 </template>

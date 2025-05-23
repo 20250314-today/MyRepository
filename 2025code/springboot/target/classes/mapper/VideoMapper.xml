@@ -11,6 +11,7 @@
     </where>
              order by id desc
 </select>
+
     <insert id="insert">
         insert into `course` (cname,url,tname,description,backImg)
         values(#{cname},#{url},#{tname},#{description},#{backImg})

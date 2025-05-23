@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.mapper.HomeworkMapper;
 import com.example.entity.Homework;
 import com.example.service.HomeworkService;
+import com.example.vo.HomeworkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class HomeworkServiceImpl extends ServiceImpl<HomeworkMapper, Homework> i
     private HomeworkMapper homeworkDao;
 
     @Override
-    public Map<String, Object> queryPage(Homework homeworkVo) {
+    public Map<String, Object> queryPage(HomeworkVo homeworkVo) {
         Integer total = homeworkDao.queryCount(homeworkVo);
         List<HashMap> data = homeworkDao.queryData(homeworkVo);
         Map<String, Object> result = new HashMap<>();
@@ -29,7 +30,7 @@ public class HomeworkServiceImpl extends ServiceImpl<HomeworkMapper, Homework> i
     }
 
     @Override
-    public Map<String, Object> findNotDoHomework(Homework homeworkVo) {
+    public Map<String, Object> findNotDoHomework(HomeworkVo homeworkVo) {
         Integer total = homeworkDao.findNotDoHomeworkCount(homeworkVo);
         List<HashMap> data = homeworkDao.findNotDoHomeworkData(homeworkVo);
         Map<String, Object> result = new HashMap<>();

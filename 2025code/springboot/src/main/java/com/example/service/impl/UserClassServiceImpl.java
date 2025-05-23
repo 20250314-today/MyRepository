@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.UserClass;
 import com.example.mapper.UserClassMapper;
 import com.example.service.UserClassService;
+import com.example.vo.UserClassVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class UserClassServiceImpl extends ServiceImpl<UserClassMapper, UserClass
     private UserClassMapper userClassDao;
 
     @Override
-    public Map<String, Object> queryPage(UserClass userClassVo) {
+    public Map<String, Object> queryPage(UserClassVo userClassVo) {
         Integer total = userClassDao.queryCount(userClassVo);
         List<HashMap> data = userClassDao.queryData(userClassVo);
         Map<String, Object> result = new HashMap<>();
@@ -35,8 +36,8 @@ public class UserClassServiceImpl extends ServiceImpl<UserClassMapper, UserClass
     }
 
     @Override
-    public List<HashMap> findList(UserClass userClassVo) {
-        List<HashMap> lists = userClassDao.findList(userClassVo);
+    public List<HashMap> selectList(UserClassVo userClassVo) {
+        List<HashMap> lists = userClassDao.selectList(userClassVo);
         return lists;
     }
 }

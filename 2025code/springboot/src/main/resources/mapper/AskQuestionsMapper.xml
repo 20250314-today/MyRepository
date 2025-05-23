@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.controller.AskQuestionsMapper">
+<mapper namespace="com.example.mapper.AskQuestionsMapper">
 
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.example.entity.AskQuestions" id="askQuestionsMap">
@@ -34,7 +34,7 @@
         FROM
         ask_questions aq
         LEFT JOIN `user` u1 ON u1.id = aq.sender
-        LEFT JOIN `user` u2 ON u2.id = aq.recipient
+        LEFT JOIN `teacher` u2 ON u2.id = aq.recipient
         LEFT JOIN video_total vt ON vt.id = aq.video_id
         <where>
             <if test="userId != null">
@@ -48,27 +48,27 @@
             </if>
         </where>
     </select>
-    <insert id="insert">
-        insert into `ask_questions` (sender,content,recipient,video_id,restore,create_time)
-        values(#{sender},#{content},#{recipient},#{video_id},#{restore},{create_time})
-    </insert>
+<!--    <insert id="insert">-->
+<!--        insert into `ask_questions` (sender,content,recipient,video_id,restore,create_time)-->
+<!--        values(#{sender},#{content},#{recipient},#{video_id},#{restore},#{create_time})-->
+<!--    </insert>-->
     <select id="queryData" resultType="java.util.HashMap">
         SELECT
-        u1.user_name AS senderName,
-        u2.user_name AS recipientName,
+        u1.name AS senderName,
+        u2.name AS recipientName,
         vt.topic,
         <include refid="baseQuery"></include>
         FROM
         ask_questions aq
         LEFT JOIN `user` u1 ON u1.id = aq.sender
-        LEFT JOIN `user` u2 ON u2.id = aq.recipient
+        LEFT JOIN `teacher` u2 ON u2.id = aq.recipient
         LEFT JOIN video_total vt ON vt.id = aq.video_id
         <where>
             <if test="userId != null">
                 AND (aq.sender = #{userId} OR aq.recipient = #{userId})
             </if>
             <if test="content != null">
-                AND aq.content = {content}
+                AND aq.content = #{content}
             </if>
             <if test="recipient != null">
                 AND aq.recipient = #{recipient}
@@ -77,10 +77,10 @@
         ORDER BY aq.id DESC
         LIMIT #{page},#{pageSize}
     </select>
-    <update id="updateById">
-        update `ask_questions` set sender =#{sender},content=#{content},recipient=#{recipient},video_id=#{video_id},restore=#{restore},
-                                   create_time=#{create_time}
-        where id=#{id}
-    </update>
+<!--    <update id="updateById">-->
+<!--        update `ask_questions` set sender =#{sender},content=#{content},recipient=#{recipient},video_id=#{video_id},restore=#{restore},-->
+<!--                                   create_time=#{create_time}-->
+<!--        where id=#{id}-->
+<!--    </update>-->
 
 </mapper>

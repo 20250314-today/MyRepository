@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="card" style="margin-bottom:5px">
+    <div class="card" style="margin-bottom:5px;width:800px">
       <el-input :prefix-icon="Search" clearable @clear="load" placeholder="请输入标题" v-model="data.name" style="width:240px;
       margin-right: 5px" ></el-input>
       <el-button type="primary" @click="load">搜 索</el-button>
       <el-button type="info" @click="reset">清空</el-button>
     </div>
-    <div class="card" style="margin-bottom:5px" v-if="data.user.role === 'ADMIN'">
+    <div class="card" style="margin-bottom:5px">
       <el-button type="success"  @click="handleAdd">新增</el-button>
 
       <el-button type="info" @click="exportData">导出</el-button>
@@ -23,9 +23,6 @@
       <div class="card" style="margin-bottom:5px" >
         <el-table :data="data.tableData" style="width: 100% "  @selection-change="handleSelectionChange"
                   :header-cell-style="{fontWeight:'bold',color:'#333',backgroundColor:'#eaf4ff'}">
-          <!--        :header-cell-style:加粗-->
-<!--          <el-table-column type="selection" width="55" />-->
-          <!--        批量选择-->
           <el-table-column  label="图书封面" width="100" >
             <template #default="scope">
               <el-image :preview-src-list="[scope.row.img]" :preview-teleported="true"
@@ -35,9 +32,13 @@
           </el-table-column>
           <el-table-column prop="name" label="书名" width="180" />
           <el-table-column prop="author" label="作者" width="180" />
+          <el-table-column prop="description" label="简介" width="180" >
+            <template v-slot="scope">
+              <el-button type="primary" @click="viewContent(scope.row.description)">查看全文</el-button>
+            </template>
+          </el-table-column>
           <el-table-column prop="price" label="书籍价格" />
-          <el-table-column prop="num" label="库存" />
-          <el-table-column label="操作"width="100" v-if="data.user.role === 'ADMIN'">
+          <el-table-column label="操作" width="100" >
             <template #default="scope" >
               <el-button   icon="Edit" type="primary" circle @click="handleEdit(scope.row)"></el-button>
               <el-button  icon="Delete" type="danger" circle @click="del(scope.row.id)"></el-button>
@@ -68,9 +69,9 @@
         <el-form-item label="价格" prop="price">
           <el-input v-model="data.form.price" autocomplete="off" placeholder="请输入价格"/>
         </el-form-item>
-        <el-form-item label="库存" prop="num">
-          <el-input v-model="data.form.num" autocomplete="off" placeholder="请输入库存"/>
-        </el-form-item>
+<!--        <el-form-item label="库存" prop="num">-->
+<!--          <el-input v-model="data.form.num" autocomplete="off" placeholder="请输入库存"/>-->
+<!--        </el-form-item>-->
         <el-form-item label="封面" prop="img">
 
           <el-upload
@@ -85,6 +86,23 @@
             <!--            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
           </el-upload>
         </el-form-item>
+        <el-form-item label="简介" prop="description">
+          <div style="border:1px solid #ccc;width:100%">
+            <Toolbar
+                style="border-bottom: 1px solid #ccc"
+                :editor="editorRef"
+                :mode="mode"
+            />
+            <Editor
+                style="height:300px;overflow-y:hidden; "
+                v-model="data.form.description"
+                :mode="mode"
+                :defaultConfig="editorConfig"
+                @onCreated="handleCreated"
+            />
+          </div>
+          <!--            <el-input type="textarea" rows="4" v-model="data.form.content" autocomplete="off" placeholder="请输入公略内容"/>-->
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -93,13 +111,21 @@
         </div>
       </template>
     </el-dialog>
+    <el-dialog v-model="data.viewVisible" title="简介" width="60%" destroy-on-close>
+      <div v-html="data.description" style="padding :0 10px">
+
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script setup>
-import {reactive,ref} from "vue";
+import {onBeforeUnmount, reactive, ref, shallowRef} from "vue";
 import {Search} from "@element-plus/icons-vue";
 import request from "@/utils/request.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import {Editor, Toolbar} from "@wangeditor/editor-for-vue";
+
 const formRef =ref()
 const data =reactive({
   user:JSON.parse( localStorage.getItem("code_user")|| '{}'),
@@ -110,6 +136,8 @@ const data =reactive({
   tableData:[],
   form:{},
   formVisible:false,
+  viewVisible:false,
+  description:null,
   rules:{
     img:[
       {required:true,message:'请输入上传图书封面',trigger:'blur'}
@@ -117,16 +145,36 @@ const data =reactive({
    name:[
       {required:true,message:'请输入书籍名称',trigger:'blur'}
     ],
-    price:[
-      {required:true,message:'请输入价格',trigger:'blur'}
-    ],
+    // price:[
+    //   {required:true,message:'请输入价格',trigger:'blur'}
+    // ],
     author:[
       {required:true,message:'请输入作者名字',trigger:'blur'}
     ],
-    num:[
-      {required:true,message:'请输入库存',trigger:'blur'}
+    description:[
+      {required:true,message:'请输入简介',trigger:'blur'}
     ],
   }
+})
+
+const editorRef=shallowRef()
+const mode='default'
+const editorConfig = {MENU_CONF:{}}
+editorConfig.MENU_CONF['uploadImage']={
+  headers:{
+    token:data.user.token,
+  },
+  server:'http://localhost:9999/files/wang/upload',//服务端图片上传接口
+  fieldName:'file'
+}
+const handleCreated=(editor)=>{
+  editorRef.value=editor
+}
+onBeforeUnmount(()=>{
+  const editor = editorRef.value
+  if(editor == null) return
+  editor.destroy()
+
 })
 const load=() =>{
   request.get('/book/selectPage',{
@@ -138,6 +186,8 @@ const load=() =>{
   }).then(res =>{
     if (res.code === '200') {
       data.tableData = res.data?.list
+      console.log('book:',data.tableData)
+      console.log('token:',data.user.token)
       data.total = res.data?.total
     }
     else{
@@ -146,6 +196,11 @@ const load=() =>{
   })
 }
 load()
+const viewContent=(description)=>{
+  data.description=description
+  data.viewVisible=true
+
+}
 const handleAdd=()=>{
   data.form={}
   data.formVisible=true

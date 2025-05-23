@@ -2,6 +2,8 @@ package com.example.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.entity.UserClass;
+import com.example.vo.UserClassVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +19,10 @@ import java.util.Map;
 public interface UserClassService extends IService<UserClass> {
 
 
-    Map<String, Object> queryPage(UserClass userClassVo);
+    Map<String, Object> queryPage(UserClassVo userClassVo);
 
-    List<UserClass> selectByClassId(Integer classId);
+    List<UserClass> selectByClassId( Integer classId);
 
-    List<HashMap> findList(UserClass userClassVo);
+    List<HashMap> selectList(UserClassVo userClassVo);
 }
 

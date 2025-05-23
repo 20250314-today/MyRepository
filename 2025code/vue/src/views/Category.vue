@@ -24,7 +24,7 @@
         <el-table :data="data.tableData" style="width: 100% "  @selection-change="handleSelectionChange"
                   :header-cell-style="{fontWeight:'bold',color:'#333',backgroundColor:'#eaf4ff'}">
           <!--        批量选择-->
-          <el-table-column prop="title" label="分类标题" width="180" />
+          <el-table-column prop="title" label="笔记标题" width="180" />
           <el-table-column label="操作"width="100" >
             <template #default="scope" >
               <el-button   icon="Edit" type="primary" circle @click="handleEdit(scope.row)"></el-button>
@@ -44,11 +44,11 @@
           @size-change="load"
       />
     </div>
-    <el-dialog v-model="data.formVisible" title="分类信息" width="500" destroy-on-close>
+    <el-dialog v-model="data.formVisible" title="笔记信息" width="500" destroy-on-close>
       <!--     destroy-on-close 重置dialog -->
       <el-form ref="formRef" :model="data.form" :rules="data.rules" label-width="80px" style="padding:20px 30px 10px 0">
-        <el-form-item label="分类标题" prop="title">
-          <el-input v-model="data.form.title" autocomplete="off" placeholder="请输入分类标题"/>
+        <el-form-item label="笔记标题" prop="title">
+          <el-input v-model="data.form.title" autocomplete="off" placeholder="请输入笔记标题"/>
         </el-form-item>
 <!--        <el-form-item label="公告内容" prop="content">-->
 <!--          <el-input type="textarea" rows="4" v-model="data.form.content" autocomplete="off" placeholder="请输入公告内容"/>-->
@@ -80,7 +80,7 @@ const data =reactive({
   formVisible:false,
   rules:{
     title:[
-      {required:true,message:'请输入分类标题',trigger:'blur'}
+      {required:true,message:'请输入笔记标题',trigger:'blur'}
     ],
   }
 })

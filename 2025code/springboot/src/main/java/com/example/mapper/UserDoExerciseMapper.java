@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.entity.UserDoExercise;
+import com.example.vo.UserDoExerciseVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import java.util.List;
 @Mapper
 public interface UserDoExerciseMapper extends BaseMapper<UserDoExercise> {
 
-    Integer queryCount(UserDoExercise userDoExerciseVo);
+    Integer queryCount(UserDoExerciseVo userDoExerciseVo);
 
-    List<HashMap> queryData(UserDoExercise userDoExerciseVo);
+    List<HashMap> queryData(UserDoExerciseVo userDoExerciseVo);
 }

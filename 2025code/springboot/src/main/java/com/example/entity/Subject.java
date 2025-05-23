@@ -29,6 +29,15 @@ public class Subject implements Serializable {
 	private String subjectName;
 
 	private Integer page;
+	private Integer classId;
+
+	public Integer getClassId() {
+		return classId;
+	}
+
+	public void setClassId(Integer classId) {
+		this.classId = classId;
+	}
 
 	/**
 	 * 每页条数

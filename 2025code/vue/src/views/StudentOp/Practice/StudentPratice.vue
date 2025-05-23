@@ -32,7 +32,7 @@
               width="180">
           </el-table-column>
           <el-table-column label="操作">
-            <template #scope="scope">
+            <template #default="scope">
               <el-button
                   size="mini"
                   @click="handleSubmit(scope.$index, scope.row)">开始答题</el-button>
@@ -58,11 +58,12 @@ import { reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from "js-cookie";
 import {ElMessage} from "element-plus";
-import { practices } from "../../../utils/studentweb/practice.js";
+import request from "@/utils/request.js"
 
 const router = useRouter()
 
 const data = reactive({
+
   ScoreData: [],
   page: {
     page: 1, // 初始页
@@ -75,9 +76,10 @@ const data = reactive({
 
 // 获取考试列表
 const listAllStudentsScore = (page) => {
-  practices(page).then(resp => {
-    data.ScoreData = resp.data.resultData.data || []
-    data.totalCount = resp.data.resultData.total || 0
+  request.post('/study/exercises/findNotDoExercises',page).then(resp => {
+    console.log("exerdata:",resp)
+    data.ScoreData = resp.data.data || []
+    data.totalCount = resp.data.total || 0
   }).catch(err => {
     console.error('获取考试列表失败', err)
     // 错误提示
@@ -87,13 +89,26 @@ const listAllStudentsScore = (page) => {
 
 // 开始答题
 const handleSubmit = (index, row) => {
-  router.push({
-    name: "MarkDownNotHomeWork",
-    params: {
-      data1: row,
-      data2: 'notwork'
-    }
-  })
+  // 添加参数校验
+  if (!row?.id || !row?.content) {
+    ElMessage.error('试题数据不完整')
+    return
+  }
+
+  // 使用更安全的编码方式
+  try {
+    router.push({
+      name: "MarkDownNotHomeWork",
+      query: {
+        id: row.id.toString(), // 确保字符串类型
+        content: encodeURIComponent(row.content),
+        data2: 'notwork'
+      }
+    })
+  } catch (e) {
+    console.error('路由跳转失败:', e)
+    ElMessage.error('系统错误，请联系管理员')
+  }
 }
 
 // 每页条数变化
@@ -111,8 +126,8 @@ const handleCurrentChange = (pageNum) => {
 }
 
 onMounted(() => {
-  data.page.classId = Cookies.get('classId')
-  data.page.userId = Cookies.get('userId')
+  data.page.classId = parseInt(Cookies.get('classId'))
+  data.page.userId =parseInt( Cookies.get('userId'))
   listAllStudentsScore(data.page)
 })
 </script>

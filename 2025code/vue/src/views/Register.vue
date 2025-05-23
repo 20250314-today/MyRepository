@@ -12,6 +12,19 @@
     <el-form-item prop="confirmPassword">
       <el-input v-model="data.form.confirmPassword" autocomplete="off" prefix-icon="Lock" size="large" show-password  placeholder="确认密码"/>
     </el-form-item>
+    <el-form-item>
+      <el-select size="large" style="width:100% " v-model="data.form.role">
+        <el-option
+            label="教师"
+            value="TEACHER">
+        </el-option>
+        <el-option
+            label="普通用户"
+            value="USER">
+        </el-option>
+
+      </el-select>
+    </el-form-item>
     <div>
       <el-button  size="large" type="primary" style="width:100%;background-color: #248243;border-color: #248243" @click="register">注册</el-button>
     </div>
@@ -33,7 +46,7 @@ const validatePass = (rule, value, callback) => {
   }
 }
 const data=reactive({
-  form:{},
+  form:{role:'USER'},
       rules: {
         username: [
           {required: true, message: '请输入账号', trigger: 'blur'},
@@ -53,15 +66,29 @@ const formRef =ref()
 const register=()=>{
   formRef.value.validate((valid)=>{
     if(valid) {
-      request.post('/register', data.form).then(res => {
-        if (res.code === '200') {
-          localStorage.setItem("code_user", JSON.stringify(res.data || {}))
-          ElMessage.success('注册成功')
-          router.push('/')
-        } else {
-          ElMessage.error(res.msg)
-        }
-      })
+      if("USER" === data.form.role)
+      {
+        request.post('/register', data.form).then(res => {
+          if (res.code === '200') {
+            localStorage.setItem("code_user", JSON.stringify(res.data || {}))
+            ElMessage.success('注册成功')
+            router.push('/')
+          } else {
+            ElMessage.error(res.msg)
+          }
+        })
+      }
+      else if("TEACHER" === data.form.role){
+        request.post('/registers', data.form).then(res => {
+          if (res.code === '200') {
+            localStorage.setItem("code_user", JSON.stringify(res.data || {}))
+            ElMessage.success('注册成功')
+            router.push('/')
+          } else {
+            ElMessage.error(res.msg)
+          }
+        })
+      }
     }
       })
 }

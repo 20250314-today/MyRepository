@@ -2,7 +2,9 @@ package com.example.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.entity.UserClass;
+import com.example.vo.UserClassVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +19,11 @@ import java.util.List;
 @Mapper
 public interface UserClassMapper extends BaseMapper<UserClass> {
 
-    Integer queryCount(UserClass userClassVo);
+    Integer queryCount( UserClassVo userClassVo);
 
-    List<HashMap> queryData(UserClass userClassVo);
+    List<HashMap> queryData( UserClassVo userClassVo);
 
-    List<UserClass> selectByClassId(Integer classId);
+    List<UserClass> selectByClassId( Integer classId);
 
-    List<HashMap> findList(UserClass userClassVo);
+    List<HashMap> selectList( UserClassVo userClassVo);
 }

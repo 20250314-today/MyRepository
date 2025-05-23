@@ -6,8 +6,13 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.*;
 
+import com.example.common.Result;
 import com.example.entity.Chunk;
+import com.example.entity.Introduction;
+import com.example.entity.VideoUpload;
 import com.example.mapper.VideoUploadMapper;
+import com.example.service.IntroductionService;
+import com.example.service.UploadVideoService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +57,18 @@ public class uploadVideoController
      * * 500 第一块上传失败，取消整个文件上传
      * * 507 服务器出错自动重试该文件块上传
      */
+    @Resource
+    UploadVideoService uploadVideoService;
+    @PostMapping("/add")
+    public Result add(@RequestBody VideoUpload introduction){//RequestBody 接受前端传来的json对象
+        uploadVideoService.add(introduction);
+        return Result.success();
+    }
+    @PostMapping("/update")
+    public Result update(@RequestBody VideoUpload introduction){//RequestBody 接受前端传来的json对象
+        uploadVideoService.update(introduction);
+        return Result.success();
+    }
     @PostMapping("/fileUpload")
     public String uploadPost(@ModelAttribute Chunk chunk, HttpServletResponse response)
     {

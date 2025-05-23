@@ -36,7 +36,9 @@ public class EchartsController {
         //查询出所有的帖子信息
         List<Introduction> introductions = introductionService.selectAll(new Introduction());
         for (Category category : categories) {
+            //使用 Java Stream 过滤出属于当前分类的帖子并计数,ObjectUtil.isNotEmpty()：检查帖子的分类 ID 是否存在
             long count = introductions.stream().filter(x -> ObjectUtil.isNotEmpty(x.getCategoryId()) && x.getCategoryId().equals(category.getId())).count();
+            //创建 Map 对象，存入分类名称 (name) 和帖子数量 (value)
             Map<String,Object> map = new HashMap<>();
             map.put("name",category.getTitle());
             map.put("value",count);
@@ -44,6 +46,7 @@ public class EchartsController {
         }
         return Result.success(list);
     }
+    //统计发帖量前五的用户及其帖子数
     @GetMapping("/bar")
     public Result bar(){
 
@@ -59,7 +62,7 @@ public class EchartsController {
         Map<String,Object> resultMap = new HashMap<>();
         List<String> xList=new ArrayList<>();
         List<Long> yList=new ArrayList<>();
-
+//保持排序后的顺序
         LinkedHashMap<String, Long> collectMap = map.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -67,6 +70,8 @@ public class EchartsController {
             xList.add(key);
             yList.add(collectMap.get(key));
         }
+        //xList：存储柱状图 X 轴数据（用户名）
+        //yList：存储柱状图 Y 轴数据（帖子数量）
         if(xList.size()>5&&yList.size()>5)
         {
             xList = xList.subList(0,5);
@@ -88,7 +93,10 @@ public class EchartsController {
             long count = introductions.stream().filter(x -> x.getTime().contains(day)).count();
             yList.add(count);
         }
+        //生成从 7 天前到今天的日期字符串列表
+
         resultMap.put("xAxis",xList);
+        //将每天的帖子数量存入 Y 轴列表
         resultMap.put("yAxis",yList);
         return Result.success(resultMap);
     }

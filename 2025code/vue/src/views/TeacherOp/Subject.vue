@@ -54,11 +54,12 @@
 </template>
 
 <script>
-import {listCourse} from '../../api/course'
+import {listCourse} from '../../utils/other/course.js'
 export default {
   name: "SubjectManagement",
   data() {
     return {
+      user:JSON.parse(localStorage.getItem('code_user') || "{}"),
       CourseData: [],
       page:{
         pageNum:1, //初始页
